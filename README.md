@@ -1,4 +1,5 @@
-![Alt text](https://github.com/Stoooner/Docker_Tutorial/blob/main/1631069263531.png)
+![Alt text](./1631069263531.png)
+[TOC]
 # Docker教程
 
 ## 1. Docker概述
@@ -13,9 +14,9 @@
 5. **Docker架构图：**
 >![Alt text](./1631070497535.png)
 6. **Docker相关名词：**
->- **镜像(image)：**docker镜像好比是一个模板，可以通过这个模板来创建容器服务，比如: tomcat服务-->run-->tomcat01容器(提供服务), 通过这个镜像可以创建多个容器(最终服务或者项目运行就是在这个容器中的)；
->- **容器(container)：**Docker利用容器技术，独立运行一个或者一组应用，通过镜像来创建。目前可以把这个容器理解为简易的Linux系统；
->- **仓库(repository)：**仓库就是存放镜像的地方，仓库分为共有仓库和私有仓库，例如DockerHub或者国内的阿里云等都有容器服务；
+>-**镜像(image)：**docker镜像好比是一个模板，可以通过这个模板来创建容器服务，比如: tomcat服务-->run-->tomcat01容器(提供服务), 通过这个镜像可以创建多个容器(最终服务或者项目运行就是在这个容器中的)；
+>-**容器(container)：**Docker利用容器技术，独立运行一个或者一组应用，通过镜像来创建。目前可以把这个容器理解为简易的Linux系统；
+>-**仓库(repository)：**仓库就是存放镜像的地方，仓库分为共有仓库和私有仓库，例如DockerHub或者国内的阿里云等都有容器服务；
 7. **docker默认工作路径：**`sudo ls /var/lib/docker/`
 8. **阿里云镜像加速：**
 >![Alt text](./1631071637992.png)
@@ -40,18 +41,17 @@
 >- `docker version` #显示docker的版本信息
 >- `docker info` # 显示docker的系统信息，包括镜像和容器的数量
 >- `docker command_line --help` # 帮助命令
->- 
->-  **帮助文档地址：**https://docs.docker.com/engine/reference/commandline/
+>-**帮助文档地址：**https://docs.docker.com/engine/reference/commandline/
 ### 2.2 镜像命令
 1. `docker images` 查看所有本地主机上的镜像
 >![Alt text](./1631080588910.png)
->- **REPOSITORY: **镜像的仓库源；
->- **TAG: **镜像的版本标签信息；
->- **IMAGE ID: **镜像的id；
->- **CREATED: **镜像创建时间；
->- **SIZE: **镜像的大小；
->- `-a` 可选项，列出所有镜像；
->- `-q` 可选项，只显示镜像的id；
+>-**REPOSITORY: **镜像的仓库源；
+>-**TAG: **镜像的版本标签信息；
+>-**IMAGE ID: **镜像的id；
+>-**CREATED: **镜像创建时间；
+>-**SIZE: **镜像的大小；
+>-`-a` 可选项，列出所有镜像；
+>-`-q` 可选项，只显示镜像的id；
 2. `docker search` 搜索镜像
 >`--filter=STARS=3000` # 可选项，搜索镜像的STARTS大于3000的；
 3. `docker pull` 下载镜像
@@ -158,7 +158,6 @@
 
 ## 附录
 >1. [Docker快速入门总结笔记；](https://blog.csdn.net/huangjhai/article/details/118854733)
->2. 
 
 
 
