@@ -1,4 +1,4 @@
-![Alt text](./1631069263531.png)
+![Alt text](https://github.com/Stoooner/Docker_Tutorial/blob/main/1631069263531.png)
 # Docker教程
 
 ## 1. Docker概述
