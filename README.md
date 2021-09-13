@@ -1,6 +1,13 @@
 ![Alt text](./1631069263531.png)
 
-# Docker教程
+# Docker教程(完整版本请下载本项目中的pdf文件)
+
+## 0. Docker image上传DockerHub
+>1. 将自己已修改了的image镜像进行commit操作：`docker commit -m="提交的描述信息" -a="作者" 容器id 目标镜像名:[TAG]`
+>2. 在命令行登录自己的Docker账号： `docker login -u DockerHubUserName`，如果在commit阶段将目标镜像名以DockerHub上传的形式进行修改的话，也即：`目标镜像名=DockerHubUserName/imagename:tagid`，那么第三步则可以跳过，不需要再经过打标签的方式修改镜像名为DockerHub需要的形式；
+>3. 给自己的image添加tag，其中image的名称需要加上自己的DockerHub用户名前缀：`docker tag imageid DockerHubUserName/imagename:tagid`
+>4. 将加上了tag信息的image上传到DockerHub：`docker push DockerHubUserName/imagename:tagid`
+>5. 在其他电脑上需要下载某个已上传的镜像时：`docker pull DockerHubUserName/imagename:tagid`
 
 ## 1. Docker概述
 
