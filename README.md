@@ -238,6 +238,15 @@
 #### 8.2 使用数据卷
 1. 方式一：直接使用命令来进行挂载 `-v`；
 
+### 9. Docker容器图像界面显示到宿主机
+1. 在宿主机中安装xserver：`sudo apt install x11-xserver-utils`；
+2. 许可所有用户都可访问xserver，注意加号前应有空格：`xhost +`；
+3. 查看当前显示的环境变量值 (要在显示屏查看，其他ssh终端不行) ：`echo $DISPLAY`；
+4. 使用image创建docker容器时，通过-v参数设置docker内外路径挂载，使显示xserver设备的socket文件在docker内也可以访问。并通过-e参数设置docker内的DISPLAY参数和宿主机一致。在创建docker容器时，添加选项如下：
+>- `docker run -it --name 容器名 -h 容器主机名 --privileged=true  -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=:0 镜像名或id /bin/bash`，例如：
+>- `docker run -it --runtime=nvidia -v /home/stoner/DockerFile/:/workplace -h dockerHost --privileged=true -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=:0 61412a1e6de9 /bin/bash`
+>- 其中需要注意的是：**`--privileged=true`使用该参数，container内的root拥有真正的root权限。否则，container内的root只是外部的一个普通用户权限。privileged启动的容器，可以看到很多host上的设备，并且可以执行mount。甚至允许你在docker容器中启动docker容器。**
+
 ## 附录
 
 > 1. [Docker快速入门总结笔记；](https://blog.csdn.net/huangjhai/article/details/118854733)
