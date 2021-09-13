@@ -250,3 +250,5 @@
 ## 附录
 
 > 1. [Docker快速入门总结笔记；](https://blog.csdn.net/huangjhai/article/details/118854733)
+>2. [Docker容器图像界面显示到宿主机屏幕配置方法——挂载方式；](https://codeleading.com/article/86445074594/)
+>3. [[docker]privileged参数；](https://blog.csdn.net/halcyonbaby/article/details/43499409)
