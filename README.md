@@ -1,6 +1,6 @@
 ![Alt text](./1631069263531.png)
 
-# Docker教程(完整版本请下载本项目中的pdf文件)
+# Docker教程(完整版本请下载本项目中的pdf或HTML文件)
 
 ## 0. Docker image上传DockerHub
 >1. 将自己已修改了的image镜像进行commit操作：`docker commit -m="提交的描述信息" -a="作者" 容器id 目标镜像名:[TAG]`
