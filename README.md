@@ -73,19 +73,19 @@
 >- **CREATED**: 镜像创建时间；
 >- **SIZE**: 镜像的大小；
 >- `-a` : 可选项，列出所有镜像；
->- `-q` : 可选项，只显示镜像的id；
+>- `-q` : **-q, --quiet, Only show image IDs**, 可选项，只显示镜像的id；
 
 2. `docker search` 搜索镜像
 > `--filter=STARS=3000` # 可选项，搜索镜像的STARTS大于3000的；
 
 3. `docker pull` 下载镜像
 
-> - **下载镜像：**`docker pull 镜像名 [:tag]`
-> - 如果不指定 `tag`则默认下载的是**latest**；
+> - **下载镜像：**`docker pull 镜像名[:tag]`
+> - 如果不指定`tag`的具体版本的话，则默认下载的是**latest**；
 > - ![Alt text](./1631081479237.png)
 > - **pull complete那一行是分层下载，是docker images的核心，联合文件系统**；
 > - **Digest那一行是该镜像的签名信息，防伪；**
-> - `docker.io/library/mysql:latest`是**image**的真实地址，因此**`docker pull mysql`**与** `docker pull docker.io/library/mysql:latest`**是等价的；
+> - **`docker.io/library/mysql:latest`**是**image**的真实地址，因此**`docker pull mysql`**与**`docker pull docker.io/library/mysql:latest`**是等价的；
 > - **如果要下载指定版本的话，可以在DockerHub中找到要下载的镜像有什么版本，然后在拉取镜像的时候进行版本指定，例如：`docker pull mysql:5.7`**
 > - ![Alt text](./1631081859542.png)
 > - **可以看到分层下载的好处就是，下载不同的版本的时候，之前下载的版本的image中有些跟现在下载的版本的image中有共用的内容的时候就不用再下载了，这就是联合文件系统**；
@@ -94,7 +94,7 @@
 
 > - `docker rmi 镜像名/镜像id`，删除单个指定的容器
 > - `docker rmi -f 镜像名/镜像id`，其中 `-f`代表的是将要删除的image完全删除干净，后面可以接多个镜像，就会删除多个指定的镜像；
-> - `docker rmi -f $(docker images -aq)`，递归的删除所有的镜像，其中 `$(docker images -aq)`就是查找到所有的**images**；
+> - `docker rmi -f $(docker images -aq)`，递归的删除所有的镜像，其中 `$(docker images -aq)`就是查找到所有的**images**，其中`-a`代表列出所有的镜像，`-q`代表只列出镜像的**ID**号；
 
 ## 3. 容器的基本命令
 
@@ -103,24 +103,53 @@
 > `docker pull ubuntu`
 
 2. **新建容器并启动：**
-
-> `docker run [可选参数] image`
->
-> - `--name="Name"` # 容器名字，例如：tomcat01、tomcat02用以区分不同的容器；
-> - `-d` #以后台方式运行；
-> - `-it` # 使用交互方式运行，进入容器查看内容；
-> - `-p` # 指定容器的端口, `-p 主机端口:容器端口(常用)`，这种方式就将外部主机的端口与容器的端口进行绑定(映射)，从而通过主机的被绑定的端口可以访问容器的端口；
-> - `-P`# 随机指定端口；
+```shell
+docker run [可选参数] image_name
+- --name="Name" # 容器名字，例如：tomcat01、tomcat02用以区分不同的容器；
+- -d #以后台方式运行, 并返回容器ID；
+- -i #参数i是keep STDIN open even if not attached，意思就是会把交互界面保留着。但是要看容器的PID1，或者说看容器的CMD是什么，有些CMD程序并不会理会任何输入，也就是说它就没有等着你输入命令，这时候你输入什么都是无效的。并且，因为linux对pid1的特殊处理，它也不会理会信号，所以你只能按ctrl+p + ctrl+q，把程序放到后台。（但通常都要run -it一起使用才有效）;
+- -t #allocate a pseudo-TTY.作用是分配一个虚拟的终端，我的理解就是，有了-t参数，这个docker就会被分配一个终端，在docker中启动bash就会有提示符。不过，-it总是一起出现的，为容器重新分配一个为输入终端，通常与-i同时使用;
+- -it # 使用交互方式运行，进入容器查看内容；
+- -p # 指定端口映射，格式为：主机port:容器port, `-p 主机端口:容器端口(常用)`，这种方式就将外部主机的端口与容器的端口进行绑定(映射)，从而通过主机的被绑定的端口可以访问容器的端口；
+- -P # 随机指定端口；
+```
 
 3. **启动并以交互模式(`-it`)进入容器：`docker run -it ubuntu /bin/bash`**
-
 > ![Alt text](./1631082983415.png)
-> 此时开启的ubuntu容器与外部的没有任何关系，属于基础版本，很多命令并不完善
+> 此时开启的ubuntu容器与外部的没有任何关系，属于基础版本，很多命令并不完善。
+>上述命令中的`/bin/bash`的作用是表示载入容器后运行bash, docker中必须要保持一个进程的运行，要不然整个容器启动后就会马上kill itself，这个/bin/bash就表示启动容器后启动bash。
 
-4. **查看当前有哪些容器是在运行的：`docker ps`，查看现在正在运行的容器+曾经有哪些容器运行过：`docker ps -a`；要显示最近创建的容器的时候可以使用 `docker ps -a -n=xxx`；只显示容器的编号使用 `-q`**
+3.1 **简单的例子**
+>https://www.cnblogs.com/frankcui/p/18293407，以下面的例子为例：
+```
+docker run -it centos /bin/bash
+首先，docker run -it centos 的意思是，为centos这个镜像创建一个容器，-it就等于 -i和-t，这两个参数的作用是，为该docker创建一个伪终端，这样就可以进入到容器的交互模式？（也就是直接进入到容器里面），后面的/bin/bash的作用是表示载入容器后运行bash ,docker中必须要保持一个进程的运行，要不然整个容器启动后就会马上kill itself，这个/bin/bash就表示启动容器后启动bash。
+```
+
+3.2 **复杂的例子**
+```
+docker run 
+--name optz_service               //给容器命名
+-it                               //打开一个交互式终端
+-p 60003:60003                    //容器内端口，映射到主机端口
+-v /opt/copt65:/opt/copt65        //容器内路径，挂载到主机路径
+-v /app/optz_service/logs:/app/optz_service/logs 
+-u appadmin                       //指定执行命令时，所使用的用户
+-d                                //后台运行容器，并返回容器ID
+optz_service:latest               //镜像名:版本号
+/bin/bash                         //启动容器后启动bash,docker容器必须要保持一个进程的运行, 要不然整个容器启动后就会马上kill itself
+/app/optz_service/bin/startup.sh  //在bash里运行的命令
+ >/dev/null                       //丢弃输出信息
+ 2>&1                             //将标准错误消息流2，重定向到标准信息流1（但均会被丢弃）
+ &                                //最后的&，让bash在后台执行
+```
+
+4. **查看当前有哪些容器是在运行的：`docker ps`，查看现在正在运行的容器+曾经有哪些容器运行过：`docker ps -a`；要显示最近创建的容器的时候可以使用 `docker ps -a -n=xxx`(-n, --last, int        Show n last created containers (includes all states) (default -1))；只显示容器的编号使用 `-q`**
 
 > ![Alt text](./1631083758429.png)
 > **个人理解(不一定对)：容器和镜像的关系有点像进程和代码的关系，代码是一堆固定的死的内容，当代码运行起来了之后变成了一个独立的进程，而这个进程除了包含代码本身之外，还包含了运行这个进程所需的一些资源，例如：内存、键盘、鼠标等，而容器和镜像的关系也是类似如此，镜像是死的，镜像运行起来了之后(**`docker run xxximage`**)才变成了容器，而容器除了镜像本身之外还包含了其他资源；**
+
+4.1 https://blog.csdn.net/claram/article/details/104228727; https://www.cnblogs.com/jun-zhou/p/14415800.html
 
 5. **退出容器：**
 
@@ -165,17 +194,18 @@
 ## 5. 进入容器的命令和拷贝命令
 
 1. 方式一：`docker exec -it 容器id bashshell`
-
 > 我们通常容器都是使用后台方式运行的，需要进入容器，修改一些配置；
 > ![Alt text](./1631086621969.png)
 
 2. 方式二：`docker attach 容器id`
-
 > - `docker exec`进入容器后会开启一个新的终端，可以在里面操作(常用)；
 > - `docker attach`进入容器正在执行的终端，不会启动新的进程；
+3. 需要注意的是：
+- `docker exec <container> some_execute_command`表示在容器中执行命令，那么在容器中执行什么命令呢，就由后面的参数**some_execute_command**决定的, /bin/bash是Linux的一种常用shell脚本，用于解释执行Linux命令，根据镜像支持的shell的不同，可以使用不同的的shell脚本。所以结合起来我们知道这个命令是用于在支持/bin/bash脚本的容器中执行相应命令。例如： 执行docker exec -it ubuntu /bin/bash 就会进入ubuntu容器的/bin/bash脚本执行模式，这时候就相当于登录到容器内部，可以通过shell和这个容器即ubuntu交互，可以执行各种Linux命令了;
+- `docker exec -it <container> some_execute_command`：exec是用来让已经运行容器跑一个some_execute_command的程序，需要注意的是，exec命令能够使用起来的前提是`<container>`已经运行起来了，否则无法执行exec命令。
+
 
 3. **从容器拷贝文件到主机：**
-
 > - `docker cp 容器id:容器内文件路径 主机目的路径`，需要注意的是容器此时是否启动是不重要的，因为容器中的文件是不会消失的，除非容器被删除；
 > - ![Alt text](./1631087522360.png)
 > - **拷贝是一个手动的过程，未来可以使用-v卷的技术实现自动同步。**
@@ -237,6 +267,15 @@
 
 #### 8.2 使用数据卷
 1. 方式一：直接使用命令来进行挂载 `-v`；
+```
+docker run -itd -v 主机目录:容器内目录 镜像名 /bin/bash
+通过下面的命令可以测试，查看容器信息：
+docker inspect 容器id
+上述代码执行完毕后可以看到：
+mounts：加载的文件系统
+source：源地址就是当前你这个docker里面的地址目录
+destination：是主机目录地址
+```
 
 ### 9. Docker容器图像界面显示到宿主机
 1. 在宿主机中安装xserver：`sudo apt install x11-xserver-utils`；
