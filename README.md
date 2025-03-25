@@ -565,3 +565,6 @@ docker run -e LOG_LEVEL=verbose my-monitoring-tool
 > 1. [Docker快速入门总结笔记；](https://blog.csdn.net/huangjhai/article/details/118854733)
 >2. [Docker容器图像界面显示到宿主机屏幕配置方法——挂载方式；](https://codeleading.com/article/86445074594/)
 >3. [[docker]privileged参数；](https://blog.csdn.net/halcyonbaby/article/details/43499409)
+>4. https://www.zhihu.com/question/53053779;
+>5. https://blog.51cto.com/u_16175430/6774064;
+>6. https://blog.csdn.net/leah126/article/details/131871717;
